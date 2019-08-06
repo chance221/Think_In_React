@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
+import Option from '../Option/option'
 
 class Options extends Component{
-    render() {
+    
+    render() 
+    {
+        const features = Object.keys(this.props.features).map(key=>
+            <Option
+                features={this.props.features}
+                selected={this.props.selected}
+                key={key}
+                name={key}
+                onSelect={this.props.handleUpdateSummary}/>)
         return (          
             <section className="main__form">
                 <h3>TECH SPECS AND CUSTOMIZATIONS</h3>
-                {this.props.handleUpdateSelectedFeatures(this.props.features, this.props.itemsSelected)}
+                {features}
             </section>
         )       
     }
@@ -13,7 +23,7 @@ class Options extends Component{
 
 Options.defaultProps ={
     features:[],
-    itemsSelected:[],
+    itemsSelected:{},
     selectedItems:{},
 }
 export default Options;

@@ -29,15 +29,18 @@ class App extends Component {
     }
   }
 
-  updateFeature(feature, newValue) {
-    const selected = Object.assign({}, this.state.selected);
-    selected[feature] = newValue;
+  updateFeature(itemsSelected, newValue) {
+    
+    console.log(`updating features`)
+    const selected = Object.assign({}, itemsSelected);
+    selected[itemsSelected] = newValue;
     this.setState({
       selected
     });
   }
 
   updateSummary = (selectedItems) =>{
+    console.log(`updating summary`)
     Object.keys(selectedItems).map(key=>
       <div className="summary__option" key= {key}>
         <div className="summary__option__label"> {key}  </div>
@@ -50,6 +53,7 @@ class App extends Component {
   }
 
   updateTotal = (selectedItems) =>{
+    console.log(`updating total`)
     if(!selectedItems){
       selectedItems=this.state.selected
     }
@@ -57,11 +61,17 @@ class App extends Component {
           .reduce((acc, curr) => acc + selectedItems[curr].cost, 0); 
   }
 
-  updateSelectedFeatures = (featureList, currentState) =>{
-    Object.keys(featureList)
+  updateSelectedFeatures = (features, itemsSelected) =>{
+    console.log(`updating selected features`)
+
+    /*What part is responsible for rendering to the DOM(setting classes correctly)?
+    /*What part is responsible for updating the state?
+    */    
+
+    Object.keys(features)
           .map(key => {
-            const options = featureList[key].map((item, index) => {
-              const selectedClass = item.name === currentState[key].name ? 'feature__selected' : '';
+            const options = features[key].map((item, index) => {
+              const selectedClass = item.name === itemsSelected[key].name ? 'feature__selected' : '';
               const featureClass = 'feature__option ' + selectedClass;
               return <li key= {index} className="feature__item">
                 <div className={featureClass}
@@ -93,45 +103,7 @@ class App extends Component {
 //What resources are required for each module.
 //Run a test to ensure that it renders
   render() {
-    const summary = Object.keys(this.state.selected)
-          .map(key => <div className="summary__option" key={key}>
-            <div className="summary__option__label">{key}  </div>
-            <div className="summary__option__value">{this.state.selected[key].name}</div>
-            <div className="summary__option__cost">
-              { new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
-                  .format(this.state.selected[key].cost) }
-            </div>
-        </div>)
-
-    const total = Object.keys(this.state.selected)
-  
-          .reduce((acc, curr) => acc + this.state.selected[curr].cost, 0);    
-
-
-    const features = Object.keys(this.props.features)
-          .map(key => {
-            const options = this.props.features[key].map((item, index) => {
-              const selectedClass = item.name === this.state.selected[key].name ? 'feature__selected' : '';
-              const featureClass = 'feature__option ' + selectedClass;
-              return <li key={index} className="feature__item">
-                <div className={featureClass}
-                  
-                  onClick={e => this.updateFeature(key, item)}>
-                    { item.name }
-                    ({ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
-                      .format(item.cost) })
-                </div>
-              </li>
-            });
-
-            return <div className="feature" key={key}>
-              <div className="feature__name">{key}</div>
-              <ul className="feature__list">
-                { options }
-              </ul>
-            </div>
-          });      
-
+    
     return (
       // title component
       <div className="App">
@@ -140,14 +112,14 @@ class App extends Component {
         <Options 
           itemsSelected = {this.state.selected}
           features = {this.props.features}
-          handleUpdateSelectedFeatures = {this.updateSelectedFeatures}
-          handleUpdateSummary = {this.updateFeature}
+          handleUpdateSelectedFeatures = { (features, itemsSelected)=>this.updateSelectedFeatures(features, itemsSelected)}
+          handleUpdateSummary ={(itemsSelected)=> this.updateFeature(itemsSelected)}
         />
         <Summary
          itemsSelected = {this.state.selected}
          features = {this.props.features}
-         handleSummary = {this.updateSummary}
-         total = {this.updateTotal}
+         handleSummary = {(itemsSelected)=>this.updateSummary(itemsSelected)}
+         total = {(itemsSelected)=>this.updateTotal(itemsSelected)}
         />
         </main>
         
@@ -157,3 +129,42 @@ class App extends Component {
 }
 
 export default App;  
+
+// const summary = Object.keys(this.state.selected)
+//           .map(key => <div className="summary__option" key={key}>
+//             <div className="summary__option__label">{key}  </div>
+//             <div className="summary__option__value">{this.state.selected[key].name}</div>
+//             <div className="summary__option__cost">
+//               { new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
+//                   .format(this.state.selected[key].cost) }
+//             </div>
+//         </div>)
+
+//     const total = Object.keys(this.state.selected)
+  
+//           .reduce((acc, curr) => acc + this.state.selected[curr].cost, 0);    
+
+
+//     const features = Object.keys(this.props.features)
+//           .map(key => {
+//             const options = this.props.features[key].map((item, index) => {
+//               const selectedClass = item.name === this.state.selected[key].name ? 'feature__selected' : '';
+//               const featureClass = 'feature__option ' + selectedClass;
+//               return <li key={index} className="feature__item">
+//                 <div className={featureClass}
+                  
+//                   onClick={e => this.updateFeature(key, item)}>
+//                     { item.name }
+//                     ({ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
+//                       .format(item.cost) })
+//                 </div>
+//               </li>
+//             });
+
+//             return <div className="feature" key={key}>
+//               <div className="feature__name">{key}</div>
+//               <ul className="feature__list">
+//                 { options }
+//               </ul>
+//             </div>
+//           });      
