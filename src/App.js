@@ -64,10 +64,6 @@ class App extends Component {
   updateSelectedFeatures = (features, itemsSelected) =>{
     console.log(`updating selected features`)
 
-    /*What part is responsible for rendering to the DOM(setting classes correctly)?
-    /*What part is responsible for updating the state?
-    */    
-
     Object.keys(features)
           .map(key => {
             const options = features[key].map((item, index) => {
@@ -94,14 +90,6 @@ class App extends Component {
   }
 
 
-
-
-
-
-//Look at the app brek it down to components
-//Decide what components you need to seperate
-//What resources are required for each module.
-//Run a test to ensure that it renders
   render() {
     
     return (
@@ -112,14 +100,14 @@ class App extends Component {
         <Options 
           itemsSelected = {this.state.selected}
           features = {this.props.features}
-          handleUpdateSelectedFeatures = { (features, itemsSelected)=>this.updateSelectedFeatures(features, itemsSelected)}
+          handleUpdateSelectedFeatures = { (features, itemsSelected)=>this.updateSelectedFeatures(this.props.features, this.state.selected)}
           handleUpdateSummary ={(itemsSelected)=> this.updateFeature(itemsSelected)}
         />
         <Summary
          itemsSelected = {this.state.selected}
          features = {this.props.features}
-         handleSummary = {(itemsSelected)=>this.updateSummary(itemsSelected)}
-         total = {(itemsSelected)=>this.updateTotal(itemsSelected)}
+         handleSummary = {(itemsSelected)=>this.updateSummary(this.state.selected)}
+         total = {(itemsSelected, )=>this.updateTotal(this.state.selected)}
         />
         </main>
         

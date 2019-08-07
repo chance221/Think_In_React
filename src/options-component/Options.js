@@ -8,7 +8,7 @@ class Options extends Component{
         const features = Object.keys(this.props.features).map(key=>
             <Option
                 features={this.props.features}
-                selected={this.props.selected}
+                selected={this.props.itemsSelected}
                 key={key}
                 name={key}
                 onSelect={this.props.handleUpdateSummary}/>)
@@ -22,7 +22,7 @@ class Options extends Component{
 }
 
 Options.defaultProps ={
-    features:[],
+    features:{},
     itemsSelected:{},
     selectedItems:{},
 }
