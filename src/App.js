@@ -106,8 +106,6 @@ class App extends Component {
         <Summary
          itemsSelected = {this.state.selected}
          features = {this.props.features}
-         handleSummary = {(itemsSelected)=>this.updateSummary(this.state.selected)}
-         total = {(itemsSelected, )=>this.updateTotal(this.state.selected)}
         />
         </main>
         
